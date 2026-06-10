@@ -1,0 +1,25 @@
+{
+  "name": "dashboard_googlechart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OsvaldoBM04/Dashboard_GoogleChart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/OsvaldoBM04/Dashboard_GoogleChart/issues"
+  },
+  "homepage": "https://github.com/OsvaldoBM04/Dashboard_GoogleChart#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}
