@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Tecnología</title>
+
+<link rel="stylesheet"
+      href="css/styles.css">
+
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+</head>
+
+<body>
+
+<h1>
+Dashboard de Productos Tecnológicos
+</h1>
+
+<div class="filtros">
+
+    <select id="filtroProducto">
+
+        <option value="Todos">
+            Todos los productos
+        </option>
+
+    </select>
+
+    <select id="filtroAnio">
+
+        <option value="Todos">
+            Todos los años
+        </option>
+
+    </select>
+
+    <select id="filtroMes">
+
+        <option value="Todos">
+            Todos los meses
+        </option>
+
+    </select>
+
+    <button id="actualizar">
+        Actualizar Datos
+    </button>
+
+</div>
+
+<div class="kpis">
+
+    <div class="card">
+        <h3>Ventas Totales</h3>
+        <p id="kpiVentas">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Ingresos Totales</h3>
+        <p id="kpiIngresos">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Producto Líder</h3>
+        <p id="kpiProducto">-</p>
+    </div>
+
+    <div class="card">
+        <h3>Precio Promedio</h3>
+        <p id="kpiPrecio">0</p>
+    </div>
+
+</div>
+
+
+<div id="googleChart"></div>
+
+
+<div id="pieChart"></div>
+
+<h2>
+Bubble Chart D3.js
+</h2>
+
+<div id="bubbleChart"></div>
+
+<h2>
+Resumen por Producto
+</h2>
+
+
+<table id="tablaResumen">
+
+    <thead>
+
+        <tr>
+
+            <th>Producto</th>
+            <th>Ventas</th>
+            <th>Ingresos</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+<script src="js/googleCharts.js"></script>
+
+<script src="js/app.js"></script>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script src="js/bubbleChart.js"></script>
+
+</body>
+
+</html>
