@@ -160,7 +160,9 @@ function aplicarFiltros(){
 
     drawBubbleChart(datos);
 
-    drawBubblePieChart(datos);
+   // drawBubblePieChart(datos);
+
+    drawBoxplot(datos);
 
 }
 

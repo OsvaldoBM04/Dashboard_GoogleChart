@@ -14,6 +14,7 @@
       href="css/styles.css">
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 
 </head>
 
@@ -109,38 +110,62 @@ Dashboard de Productos Tecnológicos
 
 </div>
 
-<h2>
-Resumen por Producto
-</h2>
+
+<div class="seccion-boxplot-tabla">
+
+    <h2>
+        Análisis estadístico de ventas
+    </h2>
+
+    <div class="contenedor-boxplot-tabla">
+
+        <!-- BOXPLOT -->
+        <div class="boxplot-area">
+
+            <h3>
+                Distribución de ventas por producto
+            </h3>
+
+            <div id="boxplot"></div>
+
+        </div>
 
 
-<table id="tablaResumen">
+        <!-- TABLA -->
+        <div class="tabla-area">
 
-    <thead>
+            <h3>
+                Resumen por producto
+            </h3>
 
-        <tr>
+            <table id="tablaResumen">
 
-            <th>Producto</th>
-            <th>Ventas</th>
-            <th>Ingresos</th>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Ventas</th>
+                        <th>Ingresos</th>
+                    </tr>
+                </thead>
 
-        </tr>
+                <tbody>
+                </tbody>
 
-    </thead>
+            </table>
 
-    <tbody>
+        </div>
 
-    </tbody>
+    </div>
 
-</table>
+</div>
 
 <script src="js/googleCharts.js"></script>
 
 <script src="js/app.js"></script>
 
-<script src="https://d3js.org/d3.v7.min.js"></script>
-
 <script src="js/bubbleChart.js"></script>
+
+<script src="js/boxplot.js"></script>
 
 </body>
 
