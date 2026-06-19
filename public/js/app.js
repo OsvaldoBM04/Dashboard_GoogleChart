@@ -1,12 +1,29 @@
 let datosGlobales = [];
 
-async function cargarDatos(){
+async function cargarDatos(expandir=false){
 
     const respuesta =
-        await fetch("/api/ventas");
+        await fetch("/api/ventas?" + Date.now());
 
-    datosGlobales =
+
+    const datos =
         await respuesta.json();
+
+
+    if(expandir){
+
+        datosGlobales = datos;
+
+    }else{
+
+        datosGlobales =
+        datos.filter(d =>
+            d.mes === "Enero" ||
+            d.mes === "Febrero"
+        );
+
+    }
+
 
     llenarFiltros();
 
@@ -143,6 +160,8 @@ function aplicarFiltros(){
 
     drawBubbleChart(datos);
 
+    drawBubblePieChart(datos);
+
 }
 
 function actualizarKPIs(datos){
@@ -272,19 +291,26 @@ function actualizarTabla(datos){
 
 }
 
+
+
+
 google.charts
 .setOnLoadCallback(
-    cargarDatos
+    () => cargarDatos(false)
 );
 
+
+
+
+
+
 document
-.getElementById(
-    "actualizar"
-)
+.getElementById("actualizar")
 .addEventListener(
     "click",
-    aplicarFiltros
+    () => cargarDatos(true)
 );
+
 
 document
 .getElementById(
