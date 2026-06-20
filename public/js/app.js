@@ -380,6 +380,8 @@ function aplicarFiltros(){
 
     drawBubbleChart(datos);
 
+    actualizarDescripcionBubble(datos);
+
 
     drawBoxplot(datos);
 
@@ -775,3 +777,96 @@ document
 
 
 });
+
+function actualizarDescripcionBubble(datos){
+
+    if(!datos || datos.length===0){
+        return;
+    }
+
+
+    const resumen = {};
+
+
+    datos.forEach(d=>{
+
+
+        if(!resumen[d.producto]){
+
+            resumen[d.producto]={
+
+                ventas:0,
+                ingresos:0,
+                precios:[]
+
+            };
+
+        }
+
+
+        resumen[d.producto].ventas += d.ventas;
+
+        resumen[d.producto].ingresos += d.ingresos;
+
+        resumen[d.producto].precios.push(d.precio);
+
+
+    });
+
+
+
+    let productoLider = null;
+
+
+    Object.keys(resumen).forEach(producto=>{
+
+
+        if(
+            !productoLider ||
+            resumen[producto].ingresos >
+            resumen[productoLider].ingresos
+        ){
+
+            productoLider = producto;
+
+        }
+
+
+    });
+
+
+
+    const datosLider =
+    resumen[productoLider];
+
+
+    const promedioPrecio =
+    datosLider.precios.reduce(
+        (a,b)=>a+b,
+        0
+    ) /
+    datosLider.precios.length;
+
+
+
+    const texto = `
+
+    ${productoLider} ha sido el producto con mayor generación de ingresos,
+    con un total de 
+    ${datosLider.ventas.toLocaleString()}
+    ventas,
+    generando ingresos por 
+    $${datosLider.ingresos.toLocaleString()}
+    y con un precio promedio de 
+    $${promedioPrecio.toFixed(2)}.
+
+    `;
+
+
+
+    document.getElementById(
+        "descripcionBubble"
+    ).innerHTML = texto;
+
+
+}
