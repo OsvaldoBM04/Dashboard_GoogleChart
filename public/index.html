@@ -5,159 +5,470 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Dashboard Tecnología</title>
 
-<link rel="stylesheet"
-      href="css/styles.css">
+
+<link rel="stylesheet" href="css/styles.css">
+
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
+
 <script src="https://d3js.org/d3.v7.min.js"></script>
+
 
 </head>
 
+
 <body>
+
 
 <h1>
 Dashboard de Productos Tecnológicos
 </h1>
 
+
+
+
+
+<!-- FILTROS -->
+
 <div class="filtros">
 
-    <select id="filtroProducto">
 
-        <option value="Todos">
-            Todos los productos
-        </option>
+<select id="filtroProducto">
 
-    </select>
+<option value="Todos">
+Todos los productos
+</option>
 
-    <select id="filtroAnio">
+</select>
 
-        <option value="Todos">
-            Todos los años
-        </option>
 
-    </select>
 
-    <select id="filtroMes">
+<select id="filtroAnio">
 
-        <option value="Todos">
-            Todos los meses
-        </option>
+<option value="Todos">
+Todos los años
+</option>
 
-    </select>
+</select>
 
-    <button id="actualizar">
-        Actualizar Datos
-    </button>
+
+
+<select id="filtroMes">
+
+<option value="Todos">
+Todos los meses
+</option>
+
+</select>
+
+
+
+
+<select id="filtroPeriodo">
+
+
+<option value="Todos">
+Todos los periodos
+</option>
+
+
+<option value="Trimestre1">
+Primer trimestre
+</option>
+
+
+<option value="Trimestre2">
+Segundo trimestre
+</option>
+
+
+<option value="Trimestre3">
+Tercer trimestre
+</option>
+
+
+<option value="Trimestre4">
+Cuarto trimestre
+</option>
+
+
+
+</select>
+
+
+
+
+<button id="actualizar">
+
+Actualizar Datos
+
+</button>
+
 
 </div>
+
+
+
+
+
+
+<!-- KPI -->
 
 <div class="kpis">
 
-    <div class="card">
-        <h3>Ventas Totales</h3>
-        <p id="kpiVentas">0</p>
-    </div>
 
-    <div class="card">
-        <h3>Ingresos Totales</h3>
-        <p id="kpiIngresos">0</p>
-    </div>
+<div class="card">
 
-    <div class="card">
-        <h3>Producto Líder</h3>
-        <p id="kpiProducto">-</p>
-    </div>
+<h3>
+Ventas Totales
+</h3>
 
-    <div class="card">
-        <h3>Precio Promedio</h3>
-        <p id="kpiPrecio">0</p>
-    </div>
+<p id="kpiVentas">
+0
+</p>
+
 
 </div>
+
+
+
+
+<div class="card">
+
+<h3>
+Ingresos Totales
+</h3>
+
+<p id="kpiIngresos">
+0
+</p>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>
+Producto Líder
+</h3>
+
+<p id="kpiProducto">
+-
+</p>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>
+Precio Promedio
+</h3>
+
+<p id="kpiPrecio">
+0
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- GRAFICA PRINCIPAL -->
+
+
+<div class="grafico grafico-principal">
+
+
+<h2>
+
+Ventas históricas por producto y periodo de tiempo
+
+</h2>
+
 
 
 <div id="googleChart"></div>
 
 
-<div class="graficos">
 
-    <div class="grafico">
-
-        <h2>
-        Participación de ventas por producto
-        </h2>
-
-        <div id="pieChart"></div>
-
-    </div>
+</div>
 
 
-    <div class="grafico">
 
-        <h2>
-        Bubble Chart D3.js
-        </h2>
 
-        <div id="bubbleChart"></div>
 
-    </div>
+
+
+
+<!-- PIE + TABLA -->
+
+
+
+<div class="bloque-dashboard">
+
+
+<div class="grafico">
+
+
+<h2>
+
+Participación de ventas por producto
+
+</h2>
+
+
+
+<div id="pieChart"></div>
+
 
 
 </div>
 
 
-<div class="seccion-boxplot-tabla">
-
-    <h2>
-        Análisis estadístico de ventas
-    </h2>
-
-    <div class="contenedor-boxplot-tabla">
-
-        <!-- BOXPLOT -->
-        <div class="boxplot-area">
-
-            <h3>
-                Distribución de ventas por producto
-            </h3>
-
-            <div id="boxplot"></div>
-
-        </div>
 
 
-        <!-- TABLA -->
-        <div class="tabla-area">
 
-            <h3>
-                Resumen por producto
-            </h3>
 
-            <table id="tablaResumen">
 
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Ventas</th>
-                        <th>Ingresos</th>
-                    </tr>
-                </thead>
+<div class="tabla-area">
 
-                <tbody>
-                </tbody>
 
-            </table>
+<h2>
 
-        </div>
+Resumen por producto
 
-    </div>
+</h2>
+
+
+
+<table id="tablaResumen"
+class="tabla-estadisticas">
+
+
+<thead>
+
+
+<tr>
+
+<th>
+Producto
+</th>
+
+
+<th>
+Ventas
+</th>
+
+
+<th>
+Ingresos
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody></tbody>
+
+
+</table>
+
 
 </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- BUBBLE -->
+
+
+<div class="bloque-dashboard">
+
+
+<div class="grafico">
+
+
+<h2>
+
+Relación ventas, ingresos y precio
+
+</h2>
+
+
+
+<div id="bubbleChart"></div>
+
+
+</div>
+
+
+
+
+
+
+<div class="tabla-area">
+
+
+<h2>
+Descripción
+</h2>
+
+
+<p id="descripcionBubble">
+
+Cargando información...
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- BOX PLOT -->
+
+
+
+<div class="bloque-dashboard">
+
+
+<div class="grafico">
+
+
+<h2>
+
+Distribución estadística de ventas
+
+</h2>
+
+
+
+<div id="boxplot"></div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="tabla-area">
+
+
+<h2>
+
+Valores estadísticos
+
+</h2>
+
+
+
+
+<table class="tabla-estadisticas">
+
+
+<thead>
+
+
+<tr>
+
+
+<th>
+Producto
+</th>
+
+
+<th>
+Mínimo
+</th>
+
+
+<th>
+Máximo
+</th>
+
+
+<th>
+Promedio
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody id="tablaStatsBody"></tbody>
+
+
+
+</table>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
 
 <script src="js/googleCharts.js"></script>
 
@@ -167,6 +478,9 @@ Dashboard de Productos Tecnológicos
 
 <script src="js/boxplot.js"></script>
 
+
+
 </body>
+
 
 </html>

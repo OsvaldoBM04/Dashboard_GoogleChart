@@ -1,316 +1,701 @@
 function drawBoxplot(datos){
 
-    console.log("Dibujando boxplot con datos:", datos);
-    
-    d3.select("#boxplot")
-      .html("");
 
+console.log(
+"Dibujando boxplot con datos:",
+datos
+);
 
-    const width = 900;
-    const height = 500;
 
 
-    const svg =
-        d3.select("#boxplot")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
+d3.select("#boxplot")
+.html("");
 
 
 
-    // Agrupar ventas por producto
+const width=900;
 
-    const grupos =
-        d3.group(
-            datos,
-            d => d.producto
-        );
+const height=500;
 
 
-    const resumen = [];
 
 
-    grupos.forEach((valores, producto)=>{
+const svg =
 
+d3.select("#boxplot")
 
-        const ventas =
-            valores.map(
-                d => d.ventas
-            )
-            .sort(
-                (a,b)=>a-b
-            );
+.append("svg")
 
+.attr("width",width)
 
-        const q1 =
-            d3.quantile(
-                ventas,
-                0.25
-            );
+.attr("height",height);
 
 
-        const mediana =
-            d3.quantile(
-                ventas,
-                0.50
-            );
 
 
-        const q3 =
-            d3.quantile(
-                ventas,
-                0.75
-            );
 
+const tooltip =
 
-        const minimo =
-            d3.min(ventas);
 
+d3.select("body")
 
-        const maximo =
-            d3.max(ventas);
+.append("div")
 
+.attr("class","tooltip")
 
-        const promedio =
-            d3.mean(ventas);
+.style("position","absolute")
 
+.style("background","white")
 
+.style("border","1px solid #ccc")
 
-        resumen.push({
+.style("padding","10px")
 
-            producto,
+.style("border-radius","6px")
 
-            minimo,
+.style("pointer-events","none")
 
-            q1,
+.style("opacity",0);
 
-            mediana,
 
-            q3,
 
-            maximo,
 
-            promedio
 
-        });
 
 
-    });
+const grupos =
 
+d3.group(
 
+datos,
 
-    const x =
-        d3.scaleBand()
+d=>d.producto
 
-        .domain(
-            resumen.map(
-                d=>d.producto
-            )
-        )
+);
 
-        .range(
-            [100,800]
-        )
 
-        .padding(0.5);
 
 
 
-    const y =
-        d3.scaleLinear()
+const resumen=[];
 
-        .domain([
 
-            0,
 
-            d3.max(
-                resumen,
-                d=>d.maximo
-            )
 
-        ])
 
-        .range(
-            [400,50]
-        );
+grupos.forEach(
 
+(valores,producto)=>{
 
 
-    svg.append("g")
 
-       .attr(
-        "transform",
-        "translate(0,400)"
-       )
+const ventas =
 
-       .call(
-        d3.axisBottom(x)
-       );
+valores.map(
 
+d=>d.ventas
 
+)
 
-    svg.append("g")
+.sort(
 
-       .attr(
-        "transform",
-        "translate(100,0)"
-       )
+(a,b)=>a-b
 
-       .call(
-        d3.axisLeft(y)
-       );
+);
 
 
 
 
-    // Línea vertical rango total
 
-    svg.selectAll(".linea")
+resumen.push({
 
-    .data(resumen)
 
-    .enter()
+producto,
 
-    .append("line")
 
-    .attr(
-        "x1",
-        d=>x(d.producto)+x.bandwidth()/2
-    )
+minimo:d3.min(ventas),
 
-    .attr(
-        "x2",
-        d=>x(d.producto)+x.bandwidth()/2
-    )
 
-    .attr(
-        "y1",
-        d=>y(d.maximo)
-    )
+q1:d3.quantile(
+ventas,
+0.25
+),
 
-    .attr(
-        "y2",
-        d=>y(d.minimo)
-    )
 
-    .attr(
-        "stroke",
-        "black"
-    );
+mediana:d3.quantile(
+ventas,
+0.5
+),
 
 
+q3:d3.quantile(
+ventas,
+0.75
+),
 
 
-    // Caja IQR
+maximo:d3.max(ventas),
 
-    svg.selectAll(".caja")
 
-    .data(resumen)
+promedio:d3.mean(ventas)
 
-    .enter()
 
-    .append("rect")
 
-    .attr(
-        "x",
-        d=>x(d.producto)
-    )
+});
 
-    .attr(
-        "y",
-        d=>y(d.q3)
-    )
 
-    .attr(
-        "width",
-        x.bandwidth()
-    )
 
-    .attr(
-        "height",
-        d=>y(d.q1)-y(d.q3)
-    )
+}
 
-    .attr(
-        "fill",
-        "#60a5fa"
-    );
+);
 
 
 
 
-    // Mediana
 
-    svg.selectAll(".mediana")
 
-    .data(resumen)
 
-    .enter()
 
-    .append("line")
 
-    .attr(
-        "x1",
-        d=>x(d.producto)
-    )
+const x =
 
-    .attr(
-        "x2",
-        d=>x(d.producto)+x.bandwidth()
-    )
 
-    .attr(
-        "y1",
-        d=>y(d.mediana)
-    )
+d3.scaleBand()
 
-    .attr(
-        "y2",
-        d=>y(d.mediana)
-    )
+.domain(
 
-    .attr(
-        "stroke",
-        "red"
-    )
+resumen.map(
 
-    .attr(
-        "stroke-width",
-        3
-    );
+d=>d.producto
 
+)
 
+)
 
+.range(
 
-    // Promedio como punto
+[100,800]
 
-    svg.selectAll(".promedio")
+)
 
-    .data(resumen)
+.padding(.5);
 
-    .enter()
 
-    .append("circle")
 
-    .attr(
-        "cx",
-        d=>x(d.producto)+x.bandwidth()/2
-    )
 
-    .attr(
-        "cy",
-        d=>y(d.promedio)
-    )
 
-    .attr(
-        "r",
-        7
-    )
 
-    .attr(
-        "fill",
-        "green"
-    );
+
+const y =
+
+
+d3.scaleLinear()
+
+
+.domain([
+
+0,
+
+d3.max(
+
+resumen,
+
+d=>d.maximo
+
+)
+
+])
+
+
+.range(
+
+[400,50]
+
+);
+
+
+
+
+
+
+
+
+
+svg.append("g")
+
+.attr(
+
+"transform",
+
+"translate(0,400)"
+
+)
+
+.call(
+
+d3.axisBottom(x)
+
+);
+
+
+
+
+
+
+
+svg.append("g")
+
+.attr(
+
+"transform",
+
+"translate(100,0)"
+
+)
+
+.call(
+
+d3.axisLeft(y)
+
+);
+
+
+
+
+
+
+
+
+// ETIQUETA X
+
+
+svg.append("text")
+
+.attr(
+
+"x",
+
+450
+
+)
+
+.attr(
+
+"y",
+
+450
+
+)
+
+.attr(
+
+"text-anchor",
+
+"middle"
+
+)
+
+.style(
+
+"font-size",
+
+"18px"
+
+)
+
+.text(
+
+"Producto"
+
+);
+
+
+
+
+
+
+// ETIQUETA Y
+
+
+svg.append("text")
+
+.attr(
+
+"transform",
+
+"rotate(-90)"
+
+)
+
+.attr(
+
+"x",
+
+-250
+
+)
+
+.attr(
+
+"y",
+
+20
+
+)
+
+.attr(
+
+"text-anchor",
+
+"middle"
+
+)
+
+.style(
+
+"font-size",
+
+"18px"
+
+)
+
+.text(
+
+"Ventas (unidades)"
+
+);
+
+
+
+
+
+
+
+
+// LINEAS
+
+
+svg.selectAll(".linea")
+
+.data(resumen)
+
+.enter()
+
+.append("line")
+
+.attr(
+
+"x1",
+
+d=>x(d.producto)+x.bandwidth()/2
+
+)
+
+.attr(
+
+"x2",
+
+d=>x(d.producto)+x.bandwidth()/2
+
+)
+
+.attr(
+
+"y1",
+
+d=>y(d.maximo)
+
+)
+
+.attr(
+
+"y2",
+
+d=>y(d.minimo)
+
+)
+
+.attr(
+
+"stroke",
+
+"black"
+
+);
+
+
+
+
+
+
+
+
+// CAJAS
+
+
+svg.selectAll(".caja")
+
+.data(resumen)
+
+.enter()
+
+.append("rect")
+
+
+.on(
+
+"mouseover",
+
+function(event,d){
+
+
+
+tooltip
+
+.style(
+
+"opacity",
+
+1
+
+)
+
+.html(`
+
+<b>${d.producto}</b><br><br>
+
+Mínimo: ${d.minimo}<br>
+
+Q1: ${d.q1.toFixed(2)}<br>
+
+Mediana: ${d.mediana.toFixed(2)}<br>
+
+Q3: ${d.q3.toFixed(2)}<br>
+
+Máximo: ${d.maximo}<br>
+
+Promedio: ${d.promedio.toFixed(2)}
+
+`);
+
+}
+
+)
+
+.on(
+
+"mousemove",
+
+function(event){
+
+
+tooltip
+
+.style(
+
+"left",
+
+event.pageX+10+"px"
+
+)
+
+.style(
+
+"top",
+
+event.pageY-20+"px"
+
+);
+
+
+}
+
+)
+
+.on(
+
+"mouseout",
+
+function(){
+
+
+tooltip
+
+.style(
+
+"opacity",
+
+0
+
+);
+
+
+}
+
+)
+
+
+
+.attr(
+
+"x",
+
+d=>x(d.producto)
+
+)
+
+
+.attr(
+
+"y",
+
+d=>y(d.q3)
+
+)
+
+
+.attr(
+
+"width",
+
+x.bandwidth()
+
+)
+
+
+.attr(
+
+"height",
+
+d=>y(d.q1)-y(d.q3)
+
+)
+
+
+.attr(
+
+"fill",
+
+"#60a5fa"
+
+);
+
+
+
+
+
+
+
+
+
+// MEDIANA
+
+
+svg.selectAll(".mediana")
+
+.data(resumen)
+
+.enter()
+
+.append("line")
+
+.attr(
+
+"x1",
+
+d=>x(d.producto)
+
+)
+
+.attr(
+
+"x2",
+
+d=>x(d.producto)+x.bandwidth()
+
+)
+
+.attr(
+
+"y1",
+
+d=>y(d.mediana)
+
+)
+
+.attr(
+
+"y2",
+
+d=>y(d.mediana)
+
+)
+
+.attr(
+
+"stroke",
+
+"red"
+
+)
+
+.attr(
+
+"stroke-width",
+
+3
+
+);
+
+
+
+
+
+
+
+
+// PROMEDIO
+
+
+svg.selectAll(".promedio")
+
+.data(resumen)
+
+.enter()
+
+.append("circle")
+
+.attr(
+
+"cx",
+
+d=>x(d.producto)+x.bandwidth()/2
+
+)
+
+.attr(
+
+"cy",
+
+d=>y(d.promedio)
+
+)
+
+.attr(
+
+"r",
+
+7
+
+)
+
+.attr(
+
+"fill",
+
+"green"
+
+);
 
 
 

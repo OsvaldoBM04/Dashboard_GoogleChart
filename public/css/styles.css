@@ -1,293 +1,209 @@
-body{
+.bloque-dashboard{
 
-    font-family: Arial, sans-serif;
+display:grid;
 
-    margin:30px;
+grid-template-columns:1fr 1fr;
 
-    background:#f5f5f5;
+gap:25px;
 
-    front-size:18px
-
-}
-
-h1{
-
-    text-align:center;
-
-    font-size:38px;
-
-    margin-bottom:30px;
+margin-top:30px;
 
 }
 
-.filtros{
 
-    display:flex;
 
-    gap:15px;
+.grafico-principal{
 
-    justify-content:center;
+background:white;
 
-    flex-wrap:wrap;
+padding:20px;
 
-    margin-bottom:20px;
+border-radius:12px;
 
 }
+
+
+
+.grafico,
+.tabla-area{
+
+
+background:white;
+
+padding:20px;
+
+border-radius:12px;
+
+
+}
+
+
 
 select{
 
-    background:white;
 
-    color:black;
+font-size:24px;
 
-    border:1px solid #999;
+padding:15px;
 
-    border-radius:8px;
+min-width:280px;
 
-    padding:15px;
-
-    min-width:260px;
-
-    font-size:22px;
-
-    font-weight:bold;
 
 }
+
+
 
 option{
 
-    font-size:18px;
+font-size:22px;
 
 }
 
 
-button{
 
-    padding:15px 30px;
+.tabla-estadisticas{
 
-    cursor:pointer;
+width:100%;
 
-    font-size:22px;
+border-collapse:collapse;
 
-    font-weight:bold;
+background:white;
 
-    border-radius:8px;
+border-radius:10px;
+
+overflow:hidden;
+
+box-shadow:
+
+0 2px 8px rgba(0,0,0,.1);
+
 
 }
+
+
+
+.tabla-estadisticas th,
+.tabla-estadisticas td{
+
+
+padding:12px;
+
+text-align:center;
+
+border-bottom:1px solid #eee;
+
+
+font-size:18px;
+
+
+}
+
+
+
+
+.tabla-estadisticas th{
+
+
+background:#1e3a8a;
+
+color:white;
+
+
+}
+
+
+
+@media(max-width:900px){
+
+
+.bloque-dashboard{
+
+
+grid-template-columns:1fr;
+
+
+}
+
+
+}
+
+
 
 .kpis{
 
-    display:grid;
 
-    grid-template-columns:
-    repeat(auto-fit,minmax(200px,1fr));
+display:grid;
 
-    gap:20px;
 
-    margin-bottom:20px;
+grid-template-columns:
+
+repeat(auto-fit,minmax(220px,1fr));
+
+
+gap:20px;
+
+
+margin-bottom:30px;
+
 
 }
+
+
+
 
 .card{
 
-    background:white;
 
-    border-radius:10px;
+background:white;
 
-    padding:15px;
 
-    text-align:center;
+padding:25px;
 
-    box-shadow:
-    0 2px 8px rgba(0,0,0,.15);
 
-}
+border-radius:15px;
 
-.card p{
 
-    font-size:42px;
+text-align:center;
 
-    font-weight:bold;
 
-    color:#1e3a8a;
+box-shadow:
+
+0 4px 12px rgba(0,0,0,.15);
+
+
 
 }
+
+
 
 
 .card h3{
 
-    font-size:24px;
+
+font-size:22px;
+
+
+margin-bottom:15px;
+
 
 }
 
 
-#pieChart{
 
-    width:100%;
 
-    height:500px;
+.card p{
 
-    margin-top:20px;
 
-}
+font-size:40px;
 
-#pieChart{
 
-    width:100%;
+font-weight:bold;
 
-    height:500px;
 
-    margin-top:30px;
+color:#1e3a8a;
 
-    margin-bottom:30px;
 
-    background:white;
+margin:0;
 
-}
 
-#bubbleChart{
-
-    width:100%;
-
-    height:700px;
-
-    background:white;
-
-    margin-top:20px;
-
-    margin-bottom:20px;
-
-}
-
-.tooltip{
-
-    position:absolute;
-
-    background:white;
-
-    border:1px solid #ccc;
-
-    padding:10px;
-
-    border-radius:5px;
-
-    pointer-events:none;
-
-}
-
-
-#googleChart{
-
-    width:100%;
-
-    height:600px;
-
-}
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    background:white;
-
-    margin-top:20px;
-
-}
-
-th,
-td{
-
-    border:1px solid #ddd;
-
-    padding:10px;
-
-    text-align:center;
-
-}
-
-th{
-
-    background:#ececec;
-
-}
-
-.graficos{
-
-    display:grid;
-
-    grid-template-columns:
-
-    repeat(auto-fit,minmax(450px,1fr));
-
-    gap:25px;
-
-    margin-top:30px;
-
-}
-
-
-.grafico{
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:12px;
-
-}
-
-table{
-
-    font-size:20px;
-
-}
-
-th{
-
-    font-size:22px;
-
-}
-
-td{
-
-    font-size:20px;
-
-}
-
-
-.seccion-boxplot-tabla{
-    margin-top: 30px;
-}
-
-.contenedor-boxplot-tabla{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    align-items: start;
-}
-
-/* Boxplot */
-.boxplot-area{
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-/* Tabla */
-.tabla-area{
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-/* Mejor tipografía */
-.tabla-area table{
-    font-size: 16px;
-}
-
-.boxplot-area h3,
-.tabla-area h3{
-    margin-bottom: 10px;
 }

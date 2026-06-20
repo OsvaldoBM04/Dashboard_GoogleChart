@@ -177,4 +177,4 @@ Esto simula una actualización dinámica de información.
 
 # Autor
 
-Proyecto desarrollado como actividad académica de visualización interactiva de datos.
+Proyecto desarrollado como actividad académica de visualización interactiva de datos. Osvaldo Bobadilla Mino
