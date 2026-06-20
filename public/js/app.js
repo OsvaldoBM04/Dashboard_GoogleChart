@@ -1,31 +1,94 @@
 let datosGlobales = [];
 
+let datosCompletos = [];
 
 
-// ================================
+// =====================================================
 // CARGAR DATOS
-// ================================
+// =====================================================
 
-async function cargarDatos(){
+async function cargarDatos(expandir = false){
 
-
-    const respuesta =
-        await fetch("/api/ventas?" + Date.now());
-
-
-
-    const datos =
-        await respuesta.json();
+    const respuesta = await fetch(
+        "/api/ventas?" + Date.now()
+    );
 
 
+    const datos = await respuesta.json();
 
-    datosGlobales = datos;
+
+    datosCompletos = datos;
+
+
+
+    if(expandir){
+
+
+        // Actualización completa hasta junio 2026
+        datosGlobales = datos;
+
+
+
+    }else{
+
+
+        // Histórico completo hasta febrero 2026
+
+        const mesesPermitidos = {
+
+            "Enero":1,
+            "Febrero":2,
+            "Marzo":3,
+            "Abril":4,
+            "Mayo":5,
+            "Junio":6,
+            "Julio":7,
+            "Agosto":8,
+            "Septiembre":9,
+            "Octubre":10,
+            "Noviembre":11,
+            "Diciembre":12
+
+        };
+
+
+
+        datosGlobales =
+        datos.filter(d=>{
+
+
+            const numeroMes =
+            mesesPermitidos[d.mes];
+
+
+
+            if(d.anio < 2026){
+
+                return true;
+
+            }
+
+
+
+            if(d.anio == 2026 && numeroMes <= 2){
+
+                return true;
+
+            }
+
+
+
+            return false;
+
+
+        });
+
+
+    }
 
 
 
     llenarFiltros();
-
-
 
     aplicarFiltros();
 
@@ -33,80 +96,44 @@ async function cargarDatos(){
 }
 
 
-
-
-
-
-
-// ================================
-// LLENAR FILTROS
-// ================================
-
+// =====================================================
+// FILTROS DINÁMICOS
+// =====================================================
 
 function llenarFiltros(){
 
 
-    const productos =
-
-    [
+    const productos = [
         ...new Set(
-
             datosGlobales.map(
-
                 d => d.producto
-
             )
-
         )
-
     ];
 
 
 
-
-
-    const anios =
-
-    [
-
+    const anios = [
         ...new Set(
-
             datosGlobales.map(
-
                 d => d.anio
-
             )
-
         )
-
     ];
 
 
 
-
-
-    const meses =
-
-    [
-
+    const meses = [
         ...new Set(
-
             datosGlobales.map(
-
                 d => d.mes
-
             )
-
         )
-
     ];
-
-
 
 
 
     const fp =
-
     document.getElementById(
         "filtroProducto"
     );
@@ -114,7 +141,6 @@ function llenarFiltros(){
 
 
     const fa =
-
     document.getElementById(
         "filtroAnio"
     );
@@ -122,12 +148,9 @@ function llenarFiltros(){
 
 
     const fm =
-
     document.getElementById(
         "filtroMes"
     );
-
-
 
 
 
@@ -138,68 +161,48 @@ function llenarFiltros(){
         productos.forEach(p=>{
 
 
-            fp.innerHTML += `
-
+            fp.innerHTML +=
+            `
             <option value="${p}">
-
             ${p}
-
             </option>
-
             `;
 
 
         });
-
-
-
 
 
 
         anios.forEach(a=>{
 
 
-            fa.innerHTML += `
-
+            fa.innerHTML +=
+            `
             <option value="${a}">
-
             ${a}
-
             </option>
-
-
             `;
 
 
         });
-
-
-
-
 
 
 
         meses.forEach(m=>{
 
 
-            fm.innerHTML += `
-
+            fm.innerHTML +=
+            `
             <option value="${m}">
-
             ${m}
-
             </option>
-
-
             `;
 
 
         });
 
 
-
     }
-
 
 
 }
@@ -207,64 +210,52 @@ function llenarFiltros(){
 
 
 
-
-
-
-
-
-// ================================
+// =====================================================
 // APLICAR FILTROS
-// ================================
-
+// =====================================================
 
 function aplicarFiltros(){
 
 
 
     const producto =
-
     document.getElementById(
         "filtroProducto"
     ).value;
 
 
 
-
     const anio =
-
     document.getElementById(
         "filtroAnio"
     ).value;
 
 
 
-
     const mes =
-
     document.getElementById(
         "filtroMes"
     ).value;
 
 
 
-
     const periodo =
-
     document.getElementById(
         "filtroPeriodo"
-    ).value;
+    )
+    ?
+    document.getElementById(
+        "filtroPeriodo"
+    ).value
+    :
+    "Todos";
 
 
 
 
-
-    let datos =
-
-    [...datosGlobales];
-
-
-
-
+    let datos = [
+        ...datosGlobales
+    ];
 
 
 
@@ -272,22 +263,14 @@ function aplicarFiltros(){
     if(producto !== "Todos"){
 
 
-
         datos =
-
         datos.filter(
-
             d =>
-
             d.producto === producto
-
         );
 
 
     }
-
-
-
 
 
 
@@ -296,22 +279,14 @@ function aplicarFiltros(){
     if(anio !== "Todos"){
 
 
-
         datos =
-
         datos.filter(
-
             d =>
-
             d.anio == anio
-
         );
 
 
     }
-
-
-
 
 
 
@@ -320,14 +295,184 @@ function aplicarFiltros(){
     if(mes !== "Todos"){
 
 
+        datos =
+        datos.filter(
+            d =>
+            d.mes === mes
+        );
+
+
+    }
+
+
+
+
+    // =====================================================
+    // PERIODOS TRIMESTRALES
+    // =====================================================
+
+
+    if(periodo !== "Todos"){
+
 
         datos =
+        datos.filter(d=>{
 
-        datos.filter(
 
-            d =>
+            const meses = {
 
-            d.mes === mes
+
+                "Enero":1,
+                "Febrero":2,
+                "Marzo":3,
+
+                "Abril":4,
+                "Mayo":5,
+                "Junio":6,
+
+                "Julio":7,
+                "Agosto":8,
+                "Septiembre":9,
+
+                "Octubre":10,
+                "Noviembre":11,
+                "Diciembre":12
+
+
+            };
+
+
+
+            const numeroMes =
+            meses[d.mes];
+
+
+
+            const trimestre =
+            Math.ceil(
+                numeroMes / 3
+            );
+
+
+
+            return (
+                periodo ===
+                "Trimestre"+trimestre
+            );
+
+
+        });
+
+
+    }
+
+
+
+
+    actualizarKPIs(datos);
+
+
+    actualizarTabla(datos);
+
+
+    drawGoogleChart(datos);
+
+
+    drawBubbleChart(datos);
+
+
+    drawBoxplot(datos);
+
+
+    actualizarStatsBoxplot(datos);
+
+
+
+}
+
+
+
+
+
+// =====================================================
+// KPIS
+// =====================================================
+
+function actualizarKPIs(datos){
+
+
+    const ventas =
+    datos.reduce(
+        (a,b)=>
+        a+b.ventas,
+        0
+    );
+
+
+
+    const ingresos =
+    datos.reduce(
+        (a,b)=>
+        a+b.ingresos,
+        0
+    );
+
+
+
+    const precio =
+    datos.reduce(
+        (a,b)=>
+        a+b.precio,
+        0
+    )
+    /
+    datos.length;
+
+
+
+
+    const resumen={};
+
+
+
+    datos.forEach(d=>{
+
+
+        resumen[d.producto] =
+        (
+            resumen[d.producto] || 0
+        )
+        +
+        d.ventas;
+
+
+    });
+
+
+
+
+    let lider="-";
+
+
+
+    if(Object.keys(resumen).length>0){
+
+
+        lider =
+        Object.keys(resumen)
+        .reduce(
+            (a,b)=>
+
+            resumen[a] >
+            resumen[b]
+
+            ?
+
+            a
+
+            :
+
+            b
 
         );
 
@@ -338,360 +483,10 @@ function aplicarFiltros(){
 
 
 
-
-
-
-
-
-    // ================================
-    // FILTRO TRIMESTRAL
-    // ================================
-
-
-    if(periodo !== "Todos"){
-
-
-
-        datos =
-
-        datos.filter(d=>{
-
-
-            let numeroMes;
-
-
-
-            switch(d.mes){
-
-
-                case "Enero":
-
-                numeroMes = 1;
-
-                break;
-
-
-
-                case "Febrero":
-
-                numeroMes = 2;
-
-                break;
-
-
-
-                case "Marzo":
-
-                numeroMes = 3;
-
-                break;
-
-
-
-                case "Abril":
-
-                numeroMes = 4;
-
-                break;
-
-
-
-                case "Mayo":
-
-                numeroMes = 5;
-
-                break;
-
-
-
-                case "Junio":
-
-                numeroMes = 6;
-
-                break;
-
-
-
-                case "Julio":
-
-                numeroMes = 7;
-
-                break;
-
-
-
-                case "Agosto":
-
-                numeroMes = 8;
-
-                break;
-
-
-
-                case "Septiembre":
-
-                numeroMes = 9;
-
-                break;
-
-
-
-                case "Octubre":
-
-                numeroMes = 10;
-
-                break;
-
-
-
-                case "Noviembre":
-
-                numeroMes = 11;
-
-                break;
-
-
-
-                case "Diciembre":
-
-                numeroMes = 12;
-
-                break;
-
-
-
-            }
-
-
-
-
-
-
-
-            const trimestre =
-
-            Math.ceil(numeroMes / 3);
-
-
-
-
-
-
-
-            return (
-
-                periodo ===
-
-                "Trimestre" + trimestre
-
-            );
-
-
-
-
-        });
-
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-    actualizarKPIs(datos);
-
-
-
-    actualizarTabla(datos);
-
-
-
-
-    drawGoogleChart(datos);
-
-
-
-    drawBubbleChart(datos);
-
-
-
-    drawBoxplot(datos);
-
-
-
-
-    actualizarStatsBoxplot(datos);
-
-
-
-    actualizarDescripcionBubble(datos);
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ================================
-// KPIs
-// ================================
-
-
-function actualizarKPIs(datos){
-
-
-
-    if(datos.length===0)
-
-    return;
-
-
-
-
-
-    const ventas =
-
-
-    datos.reduce(
-
-        (a,b)=>
-
-        a+b.ventas,
-
-        0
-
-    );
-
-
-
-
-
-
-    const ingresos =
-
-
-    datos.reduce(
-
-        (a,b)=>
-
-        a+b.ingresos,
-
-        0
-
-    );
-
-
-
-
-
-
-
-    const precio =
-
-
-    datos.reduce(
-
-        (a,b)=>
-
-        a+b.precio,
-
-        0
-
-    )
-
-    /
-
-    datos.length;
-
-
-
-
-
-
-
-    const resumen={};
-
-
-
-
-
-
-    datos.forEach(d=>{
-
-
-        resumen[d.producto]=
-
-        (
-
-        resumen[d.producto] || 0
-
-        )
-
-        +
-
-        d.ventas;
-
-
-
-    });
-
-
-
-
-
-
-
-    const lider =
-
-
-    Object.keys(resumen)
-
-    .reduce(
-
-        (a,b)=>
-
-        resumen[a] >
-
-        resumen[b]
-
-        ?
-
-        a
-
-        :
-
-        b
-
-    );
-
-
-
-
-
-
-
-
     document.getElementById(
         "kpiVentas"
     ).innerText =
-
     ventas.toLocaleString();
-
 
 
 
@@ -699,11 +494,8 @@ function actualizarKPIs(datos){
     document.getElementById(
         "kpiIngresos"
     ).innerText =
-
     "$"+
-
     ingresos.toLocaleString();
-
 
 
 
@@ -711,12 +503,8 @@ function actualizarKPIs(datos){
     document.getElementById(
         "kpiPrecio"
     ).innerText =
-
     "$"+
-
     precio.toFixed(0);
-
-
 
 
 
@@ -724,9 +512,7 @@ function actualizarKPIs(datos){
     document.getElementById(
         "kpiProducto"
     ).innerText =
-
     lider;
-
 
 
 }
@@ -736,12 +522,9 @@ function actualizarKPIs(datos){
 
 
 
-
-
-
-// ================================
+// =====================================================
 // TABLA RESUMEN
-// ================================
+// =====================================================
 
 
 function actualizarTabla(datos){
@@ -752,10 +535,7 @@ function actualizarTabla(datos){
 
 
 
-
-
     datos.forEach(d=>{
-
 
 
         if(!resumen[d.producto]){
@@ -763,35 +543,23 @@ function actualizarTabla(datos){
 
             resumen[d.producto]={
 
-
                 ventas:0,
-
 
                 ingresos:0
 
-
-
             };
-
 
 
         }
 
 
 
-
-
-
         resumen[d.producto].ventas +=
-
         d.ventas;
 
 
 
-
-
         resumen[d.producto].ingresos +=
-
         d.ingresos;
 
 
@@ -801,75 +569,35 @@ function actualizarTabla(datos){
 
 
 
-
-
-
     let html="";
 
 
 
-
-
-
-
     Object.keys(resumen)
-
     .forEach(p=>{
 
 
-
-
-
-        html += `
-
+        html +=
+        `
 
         <tr>
 
+        <td>${p}</td>
 
         <td>
-
-        ${p}
-
+        ${resumen[p].ventas.toLocaleString()}
         </td>
 
 
-
         <td>
-
-        ${
-
-        resumen[p].ventas
-
-        .toLocaleString()
-
-        }
-
-        </td>
-
-
-
-        <td>
-
         $
-
-        ${
-
-        resumen[p].ingresos
-
-        .toLocaleString()
-
-        }
-
-
+        ${resumen[p].ingresos.toLocaleString()}
         </td>
-
 
 
         </tr>
 
-
         `;
-
 
 
     });
@@ -877,18 +605,10 @@ function actualizarTabla(datos){
 
 
 
-
-
-
-
     document
-
     .querySelector(
-
         "#tablaResumen tbody"
-
     )
-
     .innerHTML = html;
 
 
@@ -902,32 +622,21 @@ function actualizarTabla(datos){
 
 
 
-
-
-
-// ================================
-// TABLA ESTADISTICA BOX PLOT
-// ================================
-
+// =====================================================
+// TABLA ESTADISTICA BOX
+// =====================================================
 
 
 function actualizarStatsBoxplot(datos){
 
 
 
-    if(!datos || datos.length===0)
-
+    if(datos.length===0)
     return;
 
 
 
-
-
     const agrupado={};
-
-
-
-
 
 
 
@@ -939,23 +648,16 @@ function actualizarStatsBoxplot(datos){
 
             agrupado[d.producto]=[];
 
-
         }
 
 
-
-
-
-
         agrupado[d.producto]
-
-        .push(d.ventas);
-
+        .push(
+            d.ventas
+        );
 
 
     });
-
-
 
 
 
@@ -964,105 +666,38 @@ function actualizarStatsBoxplot(datos){
 
 
 
-
-
-
     Object.keys(agrupado)
-
     .forEach(producto=>{
 
 
-
-
-
-        const valores =
-
+        const ventas =
         agrupado[producto];
 
 
 
-
-
-
-        const min =
-
-        Math.min(...valores);
-
-
-
-
-
-
-        const max =
-
-        Math.max(...valores);
-
-
-
-
-
-
-        const promedio =
-
-
-        valores.reduce(
-
-            (a,b)=>a+b,
-
-            0
-
-        )
-
-        /
-
-        valores.length;
-
-
-
-
-
-
-
-        html += `
-
+        html +=
+        `
 
         <tr>
 
+        <td>${producto}</td>
 
         <td>
-
-        ${producto}
-
+        ${Math.min(...ventas)}
         </td>
 
 
-
         <td>
-
-        ${min.toLocaleString()}
-
+        ${Math.max(...ventas)}
         </td>
 
 
-
         <td>
-
-        ${max.toLocaleString()}
-
+        ${(d3.mean(ventas)).toFixed(2)}
         </td>
-
-
-
-        <td>
-
-        ${promedio.toFixed(2)}
-
-        </td>
-
 
 
         </tr>
-
 
 
         `;
@@ -1074,14 +709,10 @@ function actualizarStatsBoxplot(datos){
 
 
 
-
-
     document.getElementById(
-
         "tablaStatsBody"
-
-    ).innerHTML = html;
-
+    )
+    .innerHTML = html;
 
 
 }
@@ -1092,283 +723,55 @@ function actualizarStatsBoxplot(datos){
 
 
 
-
-
-
-
-// ================================
+// =====================================================
 // EVENTOS
-// ================================
-
-
-document
-
-.getElementById(
-    "actualizar"
-)
-
-.addEventListener(
-
-"click",
-
-cargarDatos
-
-);
-
-
-
-
-
-
-document
-
-.getElementById(
-    "filtroProducto"
-)
-
-.addEventListener(
-
-"change",
-
-aplicarFiltros
-
-);
-
-
-
-
-
-
-document
-
-.getElementById(
-    "filtroAnio"
-)
-
-.addEventListener(
-
-"change",
-
-aplicarFiltros
-
-);
-
-
-
-
-
-
-document
-
-.getElementById(
-    "filtroMes"
-)
-
-.addEventListener(
-
-"change",
-
-aplicarFiltros
-
-);
-
-
-
-
-
-
-document
-
-.getElementById(
-    "filtroPeriodo"
-)
-
-.addEventListener(
-
-"change",
-
-aplicarFiltros
-
-);
-
-
-
-
-
-
-
-
-// ================================
-// INICIO
-// ================================
+// =====================================================
 
 
 google.charts.setOnLoadCallback(
-
-    ()=>{
-
-        cargarDatos();
-
-    }
-
+    ()=>
+    cargarDatos(false)
 );
 
 
-function actualizarDescripcionBubble(datos){
 
 
-    if(!datos || datos.length===0)
-    return;
+document
+.getElementById("actualizar")
+.addEventListener(
+    "click",
+    ()=>cargarDatos(true)
+);
 
 
 
-    const resumen={};
 
 
+[
+"filtroProducto",
+"filtroAnio",
+"filtroMes",
+"filtroPeriodo"
 
-    datos.forEach(d=>{
+]
+.forEach(id=>{
 
 
-        if(!resumen[d.producto]){
+    const elemento =
+    document.getElementById(id);
 
 
-            resumen[d.producto]={
 
-                ventas:0,
+    if(elemento){
 
-                ingresos:0,
 
-                precio:0,
+        elemento.addEventListener(
+            "change",
+            aplicarFiltros
+        );
 
-                registros:0
 
-            };
+    }
 
 
-        }
-
-
-
-        resumen[d.producto].ventas += d.ventas;
-
-        resumen[d.producto].ingresos += d.ingresos;
-
-        resumen[d.producto].precio += d.precio;
-
-        resumen[d.producto].registros++;
-
-
-
-
-    });
-
-
-
-
-
-    let lider = null;
-
-
-
-    Object.keys(resumen)
-
-    .forEach(p=>{
-
-
-        if(
-            !lider ||
-
-            resumen[p].ingresos >
-
-            resumen[lider].ingresos
-        ){
-
-            lider=p;
-
-        }
-
-
-
-    });
-
-
-
-
-    const promedioPrecio =
-
-    resumen[lider].precio /
-
-    resumen[lider].registros;
-
-
-
-
-    document.getElementById(
-
-        "descripcionBubble"
-
-    ).innerHTML = `
-
-
-    <b>${lider}</b> es el producto con mayor generación de ingresos.
-
-
-    <br><br>
-
-
-    Ventas acumuladas:
-
-    ${resumen[lider].ventas.toLocaleString()}
-
-
-
-    <br>
-
-
-    Ingresos generados:
-
-    $${resumen[lider].ingresos.toLocaleString()}
-
-
-
-    <br>
-
-
-    Precio promedio:
-
-    $${promedioPrecio.toFixed(2)}
-
-
-
-    <br><br>
-
-
-    Eje horizontal:
-
-    Ventas (unidades)
-
-
-
-    <br>
-
-
-    Eje vertical:
-
-    Ingresos ($ pesos)
-
-
-
-    <br>
-
-
-    Tamaño de burbuja:
-
-    Precio promedio ($ pesos)
-
-
-
-    `;
-
-
-
-}
+});
